@@ -1,0 +1,610 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  min-width: 100%;
+  min-height: 100vh;
+}
+
+body {
+  background: #050816;
+  color: #e5edff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.22), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.2), transparent 35%),
+    #050816;
+}
+
+.sidebar {
+  width: 310px;
+  min-width: 310px;
+  padding: 24px 18px;
+  border-right: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.9);
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 30px;
+}
+
+.logo {
+  width: 46px;
+  height: 46px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 22px;
+  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #9333ea);
+  box-shadow: 0 0 28px rgba(59, 130, 246, 0.45);
+}
+
+.logoArea h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.logoArea p {
+  margin: 4px 0 0;
+  color: #8ea0bf;
+  font-size: 12px;
+}
+
+.menuLabel {
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menuItem {
+  width: 100%;
+  border: 1px solid transparent;
+  color: #aebbd4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  padding: 13px 14px;
+  border-radius: 14px;
+  text-align: left;
+  transition: 0.2s;
+}
+
+.menuItem:hover,
+.menuItem.ativo {
+  color: #ffffff;
+  border-color: rgba(96, 165, 250, 0.35);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.28), rgba(15, 23, 42, 0.72));
+}
+
+.menuItem span {
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.conteudo {
+  flex: 1;
+  padding: 24px;
+  overflow: auto;
+}
+
+.topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 22px 24px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 22px;
+  background: rgba(15, 23, 42, 0.72);
+  margin-bottom: 18px;
+}
+
+.etiqueta {
+  color: #38bdf8;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.topo h2 {
+  margin: 8px 0 0;
+  font-size: 26px;
+  color: #ffffff;
+}
+
+.botaoPrincipal,
+.salvar {
+  border: 0;
+  border-radius: 14px;
+  padding: 12px 18px;
+  color: #ffffff;
+  font-weight: 800;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.26);
+}
+
+.botaoPrincipal:hover,
+.salvar:hover {
+  filter: brightness(1.08);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.card {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 20px;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.card span {
+  display: block;
+  color: #8ea0bf;
+  margin: 14px 0 6px;
+  font-size: 14px;
+}
+
+.card strong {
+  font-size: 34px;
+  color: #ffffff;
+}
+
+.card.azul svg {
+  color: #60a5fa;
+}
+
+.card.verde svg {
+  color: #34d399;
+}
+
+.card.roxo svg {
+  color: #a78bfa;
+}
+
+.card.vermelho svg {
+  color: #fb7185;
+}
+
+.valorCard {
+  font-size: 24px !important;
+}
+
+.areaPrincipal {
+  display: grid;
+  grid-template-columns: 1fr 390px;
+  gap: 18px;
+}
+
+.painel {
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: 22px;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.75);
+}
+
+.painel h3 {
+  margin: 8px 0 16px;
+  font-size: 22px;
+  color: #ffffff;
+}
+
+.cabecalhoPainel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.botoesTopo {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.botoesTopo .botaoPrincipal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filtros {
+  display: flex;
+  gap: 10px;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 260px;
+  padding: 0 12px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.65);
+  border-radius: 12px;
+}
+
+.busca input {
+  border: 0;
+  outline: 0;
+  padding: 12px 0;
+  color: #ffffff;
+  background: transparent;
+  width: 100%;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  outline: none;
+  border-radius: 12px;
+  padding: 12px;
+  color: #e5edff;
+  background: rgba(2, 6, 23, 0.68);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #61718d;
+}
+
+label {
+  display: block;
+  color: #8ea0bf;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 12px 0 7px;
+}
+
+textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.duasColunas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.tabela {
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.linha {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr 0.9fr 0.8fr 0.5fr;
+  gap: 10px;
+  align-items: center;
+  padding: 14px;
+  border-top: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.cabecalhoTabela {
+  border-top: 0;
+  color: #8ea0bf;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: rgba(2, 6, 23, 0.7);
+}
+
+.linha b {
+  color: #ffffff;
+}
+
+.linha small {
+  display: block;
+  color: #8ea0bf;
+  margin-top: 4px;
+}
+
+.vazio {
+  text-align: center;
+  color: #8ea0bf;
+  padding: 70px 20px;
+}
+
+.status {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 800;
+  background: rgba(96, 165, 250, 0.15);
+  color: #93c5fd;
+}
+
+.acoes {
+  display: flex;
+  gap: 8px;
+}
+
+.acoes button {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.7);
+  color: #cbd5e1;
+}
+
+.acoes button:hover {
+  background: rgba(37, 99, 235, 0.25);
+}
+
+.salvar {
+  width: 100%;
+  margin-top: 16px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+.cancelar {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: #cbd5e1;
+  background: transparent;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.cancelar:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.telaSimples {
+  min-height: 300px;
+}
+
+.telaSimples p {
+  color: #9fb1d1;
+  line-height: 1.6;
+  max-width: 760px;
+}
+
+.graficoPainel {
+  margin-top: 18px;
+}
+
+.graficoContainer {
+  width: 100%;
+  height: 390px;
+}
+
+.anosDashboard {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.anoBtn {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.68);
+  color: #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 800;
+}
+
+.anoBtn.ativo {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.tooltipGrafico {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  background: rgba(2, 6, 23, 0.96);
+  color: #e5edff;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.35);
+}
+
+.tooltipGrafico strong {
+  color: #ffffff;
+}
+
+.tooltipGrafico span {
+  color: #9fb1d1;
+}
+
+.recharts-legend-item-text {
+  color: #cbd5e1 !important;
+}
+
+@media (max-width: 1450px) {
+  .cards {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1200px) {
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .areaPrincipal {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    width: 260px;
+    min-width: 260px;
+  }
+}
+.filtroPaisesRapido {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filtroPaisBtn {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.68);
+  color: #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-weight: 800;
+}
+
+.filtroPaisBtn.ativo {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(2, 6, 23, 0.76);
+  backdrop-filter: blur(8px);
+}
+
+.modalConta {
+  width: min(980px, 96vw);
+  max-height: 90vh;
+  overflow: auto;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.18), transparent 30%),
+    rgba(15, 23, 42, 0.98);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+  padding: 22px;
+}
+
+.modalTopo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.modalTopo h3 {
+  margin: 8px 0 0;
+  color: #ffffff;
+  font-size: 24px;
+}
+
+.modalFechar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(2, 6, 23, 0.7);
+  color: #cbd5e1;
+}
+
+.detalhesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.detalhesGrid div,
+.observacaoModal {
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 16px;
+  background: rgba(2, 6, 23, 0.48);
+  padding: 13px;
+}
+
+.detalhesGrid span,
+.observacaoModal span {
+  display: block;
+  color: #8ea0bf;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 900;
+  margin-bottom: 7px;
+}
+
+.detalhesGrid strong {
+  color: #ffffff;
+  word-break: break-word;
+}
+
+.observacaoModal {
+  margin-top: 12px;
+}
+
+.observacaoModal p {
+  margin: 0;
+  color: #e5edff;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+@media (max-width: 800px) {
+  .detalhesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtroPaisesRapido {
+    justify-content: flex-start;
+  }
+}
