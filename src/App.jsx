@@ -30,49 +30,19 @@ import {
   Eye,
 } from "lucide-react";
 import "./App.css";
+import {
+  menus,
+  paises,
+  filtrosPaisDisponiveis,
+  grupos,
+  statusLista,
+  obrigatorios,
+  nomesMeses,
+  formVazio,
+  vendaVazia,
+} from "./constants";
 
-const menus = [
-  { id: "home", nome: "Visão Geral", icon: LayoutDashboard },
-  { id: "gerenciamento", nome: "Gerenciamento de Contas", icon: ClipboardList },
-  { id: "disponiveis", nome: "Contas disponíveis", icon: Users },
-  { id: "vendidas", nome: "Contas vendidas", icon: CheckCircle2 },
-  { id: "producao", nome: "Controle de Produção", icon: Package },
-  { id: "financeiro", nome: "Controle Financeiro", icon: DollarSign },
-  { id: "adm", nome: "Sistema / ADM Geral", icon: Settings },
-];
 
-const paises = ["Brasil", "EUA", "Alemanha", "Outro"];
-const filtrosPaisDisponiveis = [
-  { label: "Todos", value: "Todos" },
-  { label: "Brasil", value: "Brasil" },
-  { label: "Estados Unidos", value: "EUA" },
-  { label: "Alemanha", value: "Alemanha" },
-];
-
-const grupos = ["Geral", "Shop BR", "Shop EUA", "Shop ALE", "Monetização"];
-const statusLista = ["Disponível", "Vendida", "Aquecendo", "Ativa", "Pausada", "Problema"];
-const obrigatorios = ["usuario", "senhaTikTok", "email", "senhaEmail", "pais", "grupo", "status", "dataCriacao"];
-const nomesMeses = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
-
-const formVazio = {
-  usuario: "",
-  senhaTikTok: "",
-  email: "",
-  senhaEmail: "",
-  pais: "Brasil",
-  grupo: "Geral",
-  status: "Disponível",
-  dataCriacao: "",
-  link: "",
-  observacao: "",
-};
-
-const vendaVazia = {
-  contaId: "",
-  valorVenda: "",
-  clienteNome: "",
-  clienteTelefone: "",
-};
 
 function carregarContas() {
   try {
