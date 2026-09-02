@@ -12,24 +12,21 @@ import {
   Legend,
 } from "recharts";
 import {
-  LayoutDashboard,
   Users,
   DollarSign,
-  Settings,
   Search,
   Plus,
   Trash2,
   Pencil,
   CheckCircle2,
   AlertTriangle,
-  Package,
   FileUp,
   FileDown,
-  ClipboardList,
   X,
   Eye,
 } from "lucide-react";
 import "./App.css";
+
 import {
   menus,
   paises,
@@ -42,117 +39,22 @@ import {
   vendaVazia,
 } from "./constants";
 
-
-
-function carregarContas() {
-  try {
-    const dados = localStorage.getItem("ferrari_contas");
-    return dados ? JSON.parse(dados) : [];
-  } catch {
-    return [];
-  }
-}
-
-function moeda(valor) {
-  return Number(valor || 0).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-}
-
-function formatarData(data) {
-  if (!data) return "-";
-
-  const texto = String(data);
-
-  if (texto.includes("-")) {
-    const partes = texto.split("-");
-    if (partes.length === 3) return `${partes[2]}/${partes[1]}/${partes[0]}`;
-  }
-
-  return texto;
-}
-
-function normalizarTexto(texto) {
-  return String(texto || "")
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function paisCombina(contaPais, filtroPais) {
-  if (filtroPais === "Todos") return true;
-
-  const paisConta = normalizarTexto(contaPais);
-  const filtro = normalizarTexto(filtroPais);
-
-  if (filtro === "eua") {
-    return paisConta === "eua" || paisConta === "estados unidos" || paisConta === "usa";
-  }
-
-  return paisConta === filtro;
-}
-
-function valorDaLinha(linha, nomesPossiveis) {
-  const mapa = {};
-
-  Object.keys(linha).forEach((chave) => {
-    mapa[normalizarTexto(chave)] = linha[chave];
-  });
-
-  for (const nome of nomesPossiveis) {
-    const chaveNormalizada = normalizarTexto(nome);
-
-    if (mapa[chaveNormalizada] !== undefined) {
-      return String(mapa[chaveNormalizada] || "").trim();
-    }
-  }
-
-  return "";
-}
-
-function extrairAnoMes(data) {
-  if (!data) return null;
-
-  const texto = String(data).trim();
-
-  if (texto.includes("/")) {
-    const partes = texto.split("/");
-
-    if (partes.length === 3) {
-      const dia = Number(partes[0]);
-      const mes = Number(partes[1]);
-      const ano = Number(partes[2]);
-
-      if (!Number.isNaN(dia) && !Number.isNaN(mes) && !Number.isNaN(ano)) {
-        return { ano, mes };
-      }
-    }
-  }
-
-  if (texto.includes("-")) {
-    const partes = texto.split("-");
-
-    if (partes.length === 3) {
-      const ano = Number(partes[0]);
-      const mes = Number(partes[1]);
-
-      if (!Number.isNaN(ano) && !Number.isNaN(mes)) {
-        return { ano, mes };
-      }
-    }
-  }
-
-  return null;
-}
+import {
+  carregarContas,
+  moeda,
+  formatarData,
+  paisCombina,
+  valorDaLinha,
+  extrairAnoMes,
+} from "./utils";
 
 function GraficoTooltip({ active, payload, label }) {
   if (!active || !payload || payload.length === 0) return null;
 
-  const quantidade = payload.find((item) => item.dataKey === "contasVendidas")?.value || 0;
-  const faturamento = payload.find((item) => item.dataKey === "faturamento")?.value || 0;
+  const quantidade =
+    payload.find((item) => item.dataKey === "contasVendidas")?.value || 0;
+  const faturamento =
+    payload.find((item) => item.dataKey === "faturamento")?.value || 0;
 
   return (
     <div className="tooltipGrafico">
@@ -163,7 +65,16 @@ function GraficoTooltip({ active, payload, label }) {
   );
 }
 
-function Dashboard({ total, disponiveis, faturamentoTotal, problemas, vendidas, anoDashboard, setAnoDashboard, dadosGrafico }) {
+function Dashboard({
+  total,
+  disponiveis,
+  faturamentoTotal,
+  problemas,
+  vendidas,
+  anoDashboard,
+  setAnoDashboard,
+  dadosGrafico,
+}) {
   return (
     <>
       <section className="cards">
@@ -220,11 +131,25 @@ function Dashboard({ total, disponiveis, faturamentoTotal, problemas, vendidas, 
 
         <div className="graficoContainer">
           <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart data={dadosGrafico} margin={{ top: 18, right: 22, bottom: 10, left: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(148, 163, 184, 0.14)" />
+            <ComposedChart
+              data={dadosGrafico}
+              margin={{ top: 18, right: 22, bottom: 10, left: 0 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="rgba(148, 163, 184, 0.14)"
+              />
               <XAxis dataKey="mes" stroke="#8ea0bf" />
-              <YAxis yAxisId="left" stroke="#8ea0bf" allowDecimals={false} />
-              <YAxis yAxisId="right" orientation="right" stroke="#8ea0bf" />
+              <YAxis
+                yAxisId="left"
+                stroke="#8ea0bf"
+                allowDecimals={false}
+              />
+              <YAxis
+                yAxisId="right"
+                orientation="right"
+                stroke="#8ea0bf"
+              />
               <Tooltip content={<GraficoTooltip />} />
               <Legend />
               <Bar
@@ -323,7 +248,9 @@ function DetalhesConta({ conta, onFechar }) {
 
           <div>
             <span>Valor vendido</span>
-            <strong>{conta.valorVenda ? moeda(conta.valorVenda) : "-"}</strong>
+            <strong>
+              {conta.valorVenda ? moeda(conta.valorVenda) : "-"}
+            </strong>
           </div>
 
           <div>
@@ -351,7 +278,13 @@ function DetalhesConta({ conta, onFechar }) {
   );
 }
 
-function TabelaContas({ lista, vazio, onVisualizarConta, onEditarConta, onExcluirConta }) {
+function TabelaContas({
+  lista,
+  vazio,
+  onVisualizarConta,
+  onEditarConta,
+  onExcluirConta,
+}) {
   return (
     <div className="tabela">
       <div className="linha cabecalhoTabela">
@@ -380,15 +313,24 @@ function TabelaContas({ lista, vazio, onVisualizarConta, onEditarConta, onExclui
             </span>
 
             <span className="acoes">
-              <button title="Ver dados" onClick={() => onVisualizarConta(conta)}>
+              <button
+                title="Ver dados"
+                onClick={() => onVisualizarConta(conta)}
+              >
                 <Eye size={16} />
               </button>
 
-              <button title="Editar conta" onClick={() => onEditarConta(conta)}>
+              <button
+                title="Editar conta"
+                onClick={() => onEditarConta(conta)}
+              >
                 <Pencil size={16} />
               </button>
 
-              <button title="Excluir conta" onClick={() => onExcluirConta(conta.id)}>
+              <button
+                title="Excluir conta"
+                onClick={() => onExcluirConta(conta.id)}
+              >
                 <Trash2 size={16} />
               </button>
             </span>
@@ -399,7 +341,12 @@ function TabelaContas({ lista, vazio, onVisualizarConta, onEditarConta, onExclui
   );
 }
 
-function FormularioConta({ contaEditando, versaoFormulario, onSalvarConta, onCancelarEdicao }) {
+function FormularioConta({
+  contaEditando,
+  versaoFormulario,
+  onSalvarConta,
+  onCancelarEdicao,
+}) {
   const [form, setForm] = useState(formVazio);
 
   useEffect(() => {
@@ -435,21 +382,40 @@ function FormularioConta({ contaEditando, versaoFormulario, onSalvarConta, onCan
       <h3>{contaEditando ? "Editar conta" : "Nova conta"}</h3>
 
       <label>Usuário *</label>
-      <input value={form.usuario} onChange={(e) => atualizar("usuario", e.target.value)} placeholder="@usuario" />
+      <input
+        value={form.usuario}
+        onChange={(e) => atualizar("usuario", e.target.value)}
+        placeholder="@usuario"
+      />
 
       <label>Senha TikTok *</label>
-      <input value={form.senhaTikTok} onChange={(e) => atualizar("senhaTikTok", e.target.value)} placeholder="senha do TikTok" />
+      <input
+        value={form.senhaTikTok}
+        onChange={(e) => atualizar("senhaTikTok", e.target.value)}
+        placeholder="senha do TikTok"
+      />
 
       <label>Email *</label>
-      <input value={form.email} onChange={(e) => atualizar("email", e.target.value)} placeholder="email da conta" />
+      <input
+        value={form.email}
+        onChange={(e) => atualizar("email", e.target.value)}
+        placeholder="email da conta"
+      />
 
       <label>Senha Email *</label>
-      <input value={form.senhaEmail} onChange={(e) => atualizar("senhaEmail", e.target.value)} placeholder="senha do email" />
+      <input
+        value={form.senhaEmail}
+        onChange={(e) => atualizar("senhaEmail", e.target.value)}
+        placeholder="senha do email"
+      />
 
       <div className="duasColunas">
         <div>
           <label>País *</label>
-          <select value={form.pais} onChange={(e) => atualizar("pais", e.target.value)}>
+          <select
+            value={form.pais}
+            onChange={(e) => atualizar("pais", e.target.value)}
+          >
             {paises.map((pais) => (
               <option key={pais}>{pais}</option>
             ))}
@@ -458,7 +424,10 @@ function FormularioConta({ contaEditando, versaoFormulario, onSalvarConta, onCan
 
         <div>
           <label>Grupo *</label>
-          <select value={form.grupo} onChange={(e) => atualizar("grupo", e.target.value)}>
+          <select
+            value={form.grupo}
+            onChange={(e) => atualizar("grupo", e.target.value)}
+          >
             {grupos.map((grupo) => (
               <option key={grupo}>{grupo}</option>
             ))}
@@ -467,20 +436,35 @@ function FormularioConta({ contaEditando, versaoFormulario, onSalvarConta, onCan
       </div>
 
       <label>Status *</label>
-      <select value={form.status} onChange={(e) => atualizar("status", e.target.value)}>
+      <select
+        value={form.status}
+        onChange={(e) => atualizar("status", e.target.value)}
+      >
         {statusLista.map((status) => (
           <option key={status}>{status}</option>
         ))}
       </select>
 
       <label>Data de criação *</label>
-      <input type="date" value={form.dataCriacao} onChange={(e) => atualizar("dataCriacao", e.target.value)} />
+      <input
+        type="date"
+        value={form.dataCriacao}
+        onChange={(e) => atualizar("dataCriacao", e.target.value)}
+      />
 
       <label>Link</label>
-      <input value={form.link} onChange={(e) => atualizar("link", e.target.value)} placeholder="link da conta ou pasta" />
+      <input
+        value={form.link}
+        onChange={(e) => atualizar("link", e.target.value)}
+        placeholder="link da conta ou pasta"
+      />
 
       <label>Observação</label>
-      <textarea value={form.observacao} onChange={(e) => atualizar("observacao", e.target.value)} placeholder="Anotações importantes..." />
+      <textarea
+        value={form.observacao}
+        onChange={(e) => atualizar("observacao", e.target.value)}
+        placeholder="Anotações importantes..."
+      />
 
       <button className="salvar" onClick={salvar}>
         <Plus size={18} />
@@ -531,7 +515,10 @@ function GerenciamentoDeContas({
               onChange={importarExcel}
             />
 
-            <button className="botaoPrincipal" onClick={() => arquivoRef.current.click()}>
+            <button
+              className="botaoPrincipal"
+              onClick={() => arquivoRef.current.click()}
+            >
               <FileUp size={17} />
               Importar Excel
             </button>
@@ -546,10 +533,17 @@ function GerenciamentoDeContas({
         <div className="filtros" style={{ marginBottom: 16 }}>
           <div className="busca">
             <Search size={16} />
-            <input value={busca} onChange={(e) => setBusca(e.target.value)} placeholder="Buscar conta..." />
+            <input
+              value={busca}
+              onChange={(e) => setBusca(e.target.value)}
+              placeholder="Buscar conta..."
+            />
           </div>
 
-          <select value={paisFiltro} onChange={(e) => setPaisFiltro(e.target.value)}>
+          <select
+            value={paisFiltro}
+            onChange={(e) => setPaisFiltro(e.target.value)}
+          >
             <option>Todos</option>
             {paises.map((pais) => (
               <option key={pais}>{pais}</option>
@@ -596,7 +590,11 @@ function ContasDisponiveis({
           {filtrosPaisDisponiveis.map((item) => (
             <button
               key={item.value}
-              className={filtroPaisDisponiveis === item.value ? "filtroPaisBtn ativo" : "filtroPaisBtn"}
+              className={
+                filtroPaisDisponiveis === item.value
+                  ? "filtroPaisBtn ativo"
+                  : "filtroPaisBtn"
+              }
               onClick={() => setFiltroPaisDisponiveis(item.value)}
             >
               {item.label}
@@ -616,7 +614,12 @@ function ContasDisponiveis({
   );
 }
 
-function ContasVendidas({ contasVendidas, contasParaSelecionarVenda, salvarVenda, excluirConta }) {
+function ContasVendidas({
+  contasVendidas,
+  contasParaSelecionarVenda,
+  salvarVenda,
+  excluirConta,
+}) {
   const [vendaEditandoId, setVendaEditandoId] = useState(null);
   const [venda, setVenda] = useState(vendaVazia);
 
@@ -644,7 +647,9 @@ function ContasVendidas({ contasVendidas, contasParaSelecionarVenda, salvarVenda
     if (ok) limparVenda();
   }
 
-  const contasSelect = contasParaSelecionarVenda.filter((conta) => conta.status !== "Vendida" || conta.id === vendaEditandoId);
+  const contasSelect = contasParaSelecionarVenda.filter(
+    (conta) => conta.status !== "Vendida" || conta.id === vendaEditandoId
+  );
 
   return (
     <section className="areaPrincipal">
@@ -680,11 +685,17 @@ function ContasVendidas({ contasVendidas, contasParaSelecionarVenda, salvarVenda
                 <span>{moeda(conta.valorVenda)}</span>
 
                 <span className="acoes">
-                  <button title="Editar venda" onClick={() => iniciarEdicaoVenda(conta)}>
+                  <button
+                    title="Editar venda"
+                    onClick={() => iniciarEdicaoVenda(conta)}
+                  >
                     <Pencil size={16} />
                   </button>
 
-                  <button title="Excluir conta" onClick={() => excluirConta(conta.id)}>
+                  <button
+                    title="Excluir conta"
+                    onClick={() => excluirConta(conta.id)}
+                  >
                     <Trash2 size={16} />
                   </button>
                 </span>
@@ -695,11 +706,19 @@ function ContasVendidas({ contasVendidas, contasParaSelecionarVenda, salvarVenda
       </div>
 
       <div className="painel formulario">
-        <span className="etiqueta">{vendaEditandoId ? "Editar venda" : "Registrar venda"}</span>
-        <h3>{vendaEditandoId ? "Editar dados da venda" : "Nova venda"}</h3>
+        <span className="etiqueta">
+          {vendaEditandoId ? "Editar venda" : "Registrar venda"}
+        </span>
+        <h3>
+          {vendaEditandoId ? "Editar dados da venda" : "Nova venda"}
+        </h3>
 
         <label>Selecionar conta *</label>
-        <select value={venda.contaId} disabled={Boolean(vendaEditandoId)} onChange={(e) => atualizar("contaId", e.target.value)}>
+        <select
+          value={venda.contaId}
+          disabled={Boolean(vendaEditandoId)}
+          onChange={(e) => atualizar("contaId", e.target.value)}
+        >
           <option value="">Escolha uma conta</option>
           {contasSelect.map((conta) => (
             <option key={conta.id} value={conta.id}>
@@ -709,17 +728,31 @@ function ContasVendidas({ contasVendidas, contasParaSelecionarVenda, salvarVenda
         </select>
 
         <label>Valor vendido *</label>
-        <input value={venda.valorVenda} onChange={(e) => atualizar("valorVenda", e.target.value)} placeholder="Ex: 150,00" />
+        <input
+          value={venda.valorVenda}
+          onChange={(e) => atualizar("valorVenda", e.target.value)}
+          placeholder="Ex: 150,00"
+        />
 
         <label>Nome do cliente *</label>
-        <input value={venda.clienteNome} onChange={(e) => atualizar("clienteNome", e.target.value)} placeholder="Nome do comprador" />
+        <input
+          value={venda.clienteNome}
+          onChange={(e) => atualizar("clienteNome", e.target.value)}
+          placeholder="Nome do comprador"
+        />
 
         <label>Telefone do cliente *</label>
-        <input value={venda.clienteTelefone} onChange={(e) => atualizar("clienteTelefone", e.target.value)} placeholder="WhatsApp ou telefone" />
+        <input
+          value={venda.clienteTelefone}
+          onChange={(e) => atualizar("clienteTelefone", e.target.value)}
+          placeholder="WhatsApp ou telefone"
+        />
 
         <button className="salvar" onClick={salvar}>
           <DollarSign size={18} />
-          {vendaEditandoId ? "Salvar edição da venda" : "Salvar venda"}
+          {vendaEditandoId
+            ? "Salvar edição da venda"
+            : "Salvar venda"}
         </button>
 
         {vendaEditandoId && (
@@ -738,7 +771,10 @@ function TelaSimples({ tituloAtual }) {
     <section className="painel telaSimples">
       <span className="etiqueta">{tituloAtual}</span>
       <h3>{tituloAtual}</h3>
-      <p>Esta área está separada. O próximo passo é criar os campos específicos desse módulo.</p>
+      <p>
+        Esta área está separada. O próximo passo é criar os campos específicos
+        desse módulo.
+      </p>
     </section>
   );
 }
@@ -750,7 +786,8 @@ export default function App() {
   const [contas, setContas] = useState(() => carregarContas());
   const [busca, setBusca] = useState("");
   const [paisFiltro, setPaisFiltro] = useState("Todos");
-  const [filtroPaisDisponiveis, setFiltroPaisDisponiveis] = useState("Todos");
+  const [filtroPaisDisponiveis, setFiltroPaisDisponiveis] =
+    useState("Todos");
   const [editandoId, setEditandoId] = useState(null);
   const [anoDashboard, setAnoDashboard] = useState("2026");
   const [versaoFormulario, setVersaoFormulario] = useState(0);
@@ -770,7 +807,9 @@ export default function App() {
   }
 
   function validarConta(dados) {
-    const faltando = obrigatorios.filter((campo) => !String(dados[campo] || "").trim());
+    const faltando = obrigatorios.filter(
+      (campo) => !String(dados[campo] || "").trim()
+    );
 
     if (faltando.length > 0) {
       alert(
@@ -826,23 +865,36 @@ export default function App() {
   function excluirConta(id) {
     if (!window.confirm("Deseja excluir esta conta?")) return;
 
-    setContas((listaAtual) => listaAtual.filter((conta) => conta.id !== id));
+    setContas((listaAtual) =>
+      listaAtual.filter((conta) => conta.id !== id)
+    );
 
     if (editandoId === id) {
       setEditandoId(null);
       setVersaoFormulario((v) => v + 1);
     }
 
-    setContaVisualizando((contaAtual) => (contaAtual?.id === id ? null : contaAtual));
+    setContaVisualizando((contaAtual) =>
+      contaAtual?.id === id ? null : contaAtual
+    );
   }
 
   function salvarVenda(dadosVenda, vendaEditandoId) {
-    if (!dadosVenda.contaId || !dadosVenda.valorVenda || !dadosVenda.clienteNome || !dadosVenda.clienteTelefone) {
-      alert("Preencha conta, valor, nome do cliente e telefone do cliente.");
+    if (
+      !dadosVenda.contaId ||
+      !dadosVenda.valorVenda ||
+      !dadosVenda.clienteNome ||
+      !dadosVenda.clienteTelefone
+    ) {
+      alert(
+        "Preencha conta, valor, nome do cliente e telefone do cliente."
+      );
       return false;
     }
 
-    const valor = Number(String(dadosVenda.valorVenda).replace(",", "."));
+    const valor = Number(
+      String(dadosVenda.valorVenda).replace(",", ".")
+    );
 
     if (Number.isNaN(valor) || valor <= 0) {
       alert("Digite um valor de venda válido.");
@@ -860,14 +912,20 @@ export default function App() {
               valorVenda: valor,
               clienteNome: dadosVenda.clienteNome,
               clienteTelefone: dadosVenda.clienteTelefone,
-              dataVenda: vendaEditandoId ? conta.dataVenda || dataVendaAtual : dataVendaAtual,
+              dataVenda: vendaEditandoId
+                ? conta.dataVenda || dataVendaAtual
+                : dataVendaAtual,
               atualizadoEm: new Date().toLocaleString("pt-BR"),
             }
           : conta
       )
     );
 
-    alert(vendaEditandoId ? "Venda editada com sucesso." : "Venda registrada com sucesso.");
+    alert(
+      vendaEditandoId
+        ? "Venda editada com sucesso."
+        : "Venda registrada com sucesso."
+    );
     return true;
   }
 
@@ -883,7 +941,9 @@ export default function App() {
         const workbook = XLSX.read(dados, { type: "array" });
         const primeiraAba = workbook.SheetNames[0];
         const planilha = workbook.Sheets[primeiraAba];
-        const linhas = XLSX.utils.sheet_to_json(planilha, { defval: "" });
+        const linhas = XLSX.utils.sheet_to_json(planilha, {
+          defval: "",
+        });
 
         const importadas = [];
         const ignoradas = [];
@@ -892,15 +952,31 @@ export default function App() {
           const conta = {
             id: crypto.randomUUID(),
             usuario: valorDaLinha(linha, ["usuario", "usuário"]),
-            senhaTikTok: valorDaLinha(linha, ["senha tik tok", "senha tiktok", "senha_tik_tok"]),
+            senhaTikTok: valorDaLinha(linha, [
+              "senha tik tok",
+              "senha tiktok",
+              "senha_tik_tok",
+            ]),
             email: valorDaLinha(linha, ["email", "e-mail"]),
-            senhaEmail: valorDaLinha(linha, ["senha email", "senha e-mail", "senha_email"]),
+            senhaEmail: valorDaLinha(linha, [
+              "senha email",
+              "senha e-mail",
+              "senha_email",
+            ]),
             pais: valorDaLinha(linha, ["pais", "país"]),
             grupo: valorDaLinha(linha, ["grupo"]),
             status: valorDaLinha(linha, ["status"]),
-            dataCriacao: valorDaLinha(linha, ["data de criação", "data criacao", "data_criacao"]),
+            dataCriacao: valorDaLinha(linha, [
+              "data de criação",
+              "data criacao",
+              "data_criacao",
+            ]),
             link: valorDaLinha(linha, ["link"]),
-            observacao: valorDaLinha(linha, ["observação", "observacao", "obs"]),
+            observacao: valorDaLinha(linha, [
+              "observação",
+              "observacao",
+              "obs",
+            ]),
             valorVenda: "",
             clienteNome: "",
             clienteTelefone: "",
@@ -909,7 +985,9 @@ export default function App() {
             atualizadoEm: new Date().toLocaleString("pt-BR"),
           };
 
-          const faltaCampo = obrigatorios.some((campo) => !String(conta[campo] || "").trim());
+          const faltaCampo = obrigatorios.some(
+            (campo) => !String(conta[campo] || "").trim()
+          );
 
           if (faltaCampo) {
             ignoradas.push(index + 2);
@@ -919,7 +997,9 @@ export default function App() {
         });
 
         if (importadas.length === 0) {
-          alert("Nenhuma conta foi importada. Verifique os campos obrigatórios.");
+          alert(
+            "Nenhuma conta foi importada. Verifique os campos obrigatórios."
+          );
           return;
         }
 
@@ -974,9 +1054,11 @@ export default function App() {
 
   const contasFiltradas = useMemo(() => {
     return contas.filter((conta) => {
-      const texto = `${conta.usuario} ${conta.email} ${conta.pais} ${conta.grupo} ${conta.status}`.toLowerCase();
+      const texto =
+        `${conta.usuario} ${conta.email} ${conta.pais} ${conta.grupo} ${conta.status}`.toLowerCase();
       const passaBusca = texto.includes(busca.toLowerCase());
-      const passaPais = paisFiltro === "Todos" || paisCombina(conta.pais, paisFiltro);
+      const passaPais =
+        paisFiltro === "Todos" || paisCombina(conta.pais, paisFiltro);
 
       return passaBusca && passaPais;
     });
@@ -985,19 +1067,31 @@ export default function App() {
   const contasDisponiveisFiltradas = useMemo(() => {
     return contas.filter((conta) => {
       const statusDisponivel = conta.status === "Disponível";
-      const passaPais = paisCombina(conta.pais, filtroPaisDisponiveis);
+      const passaPais = paisCombina(
+        conta.pais,
+        filtroPaisDisponiveis
+      );
       return statusDisponivel && passaPais;
     });
   }, [contas, filtroPaisDisponiveis]);
 
-  const contasVendidas = contas.filter((conta) => conta.status === "Vendida");
+  const contasVendidas = contas.filter(
+    (conta) => conta.status === "Vendida"
+  );
   const contasParaSelecionarVenda = contas;
 
   const total = contas.length;
-  const disponiveis = contas.filter((conta) => conta.status === "Disponível").length;
+  const disponiveis = contas.filter(
+    (conta) => conta.status === "Disponível"
+  ).length;
   const vendidas = contasVendidas.length;
-  const problemas = contas.filter((conta) => conta.status === "Problema").length;
-  const faturamentoTotal = contas.reduce((soma, conta) => soma + Number(conta.valorVenda || 0), 0);
+  const problemas = contas.filter(
+    (conta) => conta.status === "Problema"
+  ).length;
+  const faturamentoTotal = contas.reduce(
+    (soma, conta) => soma + Number(conta.valorVenda || 0),
+    0
+  );
 
   const dadosGrafico = useMemo(() => {
     const base = nomesMeses.map((mes) => ({
@@ -1017,7 +1111,9 @@ export default function App() {
         const indiceMes = infoData.mes - 1;
         if (indiceMes < 0 || indiceMes > 11) return;
 
-        base[indiceMes].faturamento += Number(conta.valorVenda || 0);
+        base[indiceMes].faturamento += Number(
+          conta.valorVenda || 0
+        );
         base[indiceMes].contasVendidas += 1;
       });
 
@@ -1089,7 +1185,10 @@ export default function App() {
       );
     }
 
-    const tituloAtual = menus.find((menu) => menu.id === pagina)?.nome || "Ferrari Control";
+    const tituloAtual =
+      menus.find((menu) => menu.id === pagina)?.nome ||
+      "Ferrari Control";
+
     return <TelaSimples tituloAtual={tituloAtual} />;
   }
 
@@ -1113,7 +1212,9 @@ export default function App() {
             return (
               <button
                 key={menu.id}
-                className={pagina === menu.id ? "menuItem ativo" : "menuItem"}
+                className={
+                  pagina === menu.id ? "menuItem ativo" : "menuItem"
+                }
                 onClick={() => setPagina(menu.id)}
               >
                 <Icon size={18} />
@@ -1126,7 +1227,10 @@ export default function App() {
 
       <main className="conteudo">{renderConteudo()}</main>
 
-      <DetalhesConta conta={contaVisualizando} onFechar={() => setContaVisualizando(null)} />
+      <DetalhesConta
+        conta={contaVisualizando}
+        onFechar={() => setContaVisualizando(null)}
+      />
     </div>
   );
 }
